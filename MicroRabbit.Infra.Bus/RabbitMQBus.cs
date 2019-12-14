@@ -117,10 +117,9 @@ namespace MicroRabbit.Infra.Bus
                 var subscriptions = _handlers[eventName];
                 foreach (var subscription in subscriptions)
                 {
-                    var handler = Activator.CreateInstance(subscription);h
+                    var handler = Activator.CreateInstance(subscription);
                     if (handler == null) continue;
                     var eventType = _eventType.SingleOrDefault(t => t.Name == eventName);
-
                     var @event = JsonConvert.DeserializeObject(message, eventType);
                     var concreateType = typeof(IEventHandler<>).MakeGenericType(eventType);
                     await (Task)concreateType.GetMethod("Handle").Invoke(handler , new object[] { @event});

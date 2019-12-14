@@ -56,28 +56,31 @@ namespace MicroRabbit.Infra.Bus
         }
 
         /// <summary>
-        /// Subscribe to event
+        /// subscription for event
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <typeparam name="TH"></typeparam>
+        /// <typeparam name="T">event type</typeparam>
+        /// <typeparam name="TH">event handler</typeparam>
         public void Subscribe<T, TH>() where T : Event where TH : IEventHandler
         {
             var eventName = typeof(T).Name;
+
             var handlerType = typeof(TH);
+
             if (!_eventType.Contains(typeof(T)))
             {
                 _eventType.Add(typeof(T));
             }
+
             if (!_handlers.ContainsKey(eventName))
             {
                 _handlers.Add(eventName, new List<Type>());
             }
+
             if (_handlers[eventName].Any(s => s.GetType() == handlerType))
             {
                 throw new ArgumentException($"Handler type {handlerType.Name} is already is registered for {eventName}'", nameof(handlerType));
             }
             _handlers[eventName].Add(handlerType);
-
             StartBasicConsume<T>();
         }
 
@@ -87,14 +90,10 @@ namespace MicroRabbit.Infra.Bus
             var connection = factory.CreateConnection();
             var channel = connection.CreateModel();
             var eventname = typeof(T).Name;
-
             channel.QueueDeclare(eventname, false, false, false, null);
-
             var consumer = new AsyncEventingBasicConsumer(channel);
             consumer.Received += consumer_received;
             channel.BasicConsume(eventname, true, consumer);
-
- 
         }
 
         private async Task consumer_received(object sender, BasicDeliverEventArgs e)
@@ -108,7 +107,7 @@ namespace MicroRabbit.Infra.Bus
             catch (Exception ex)
             {
             }
-        }
+        } 
 
         private async Task ProcessEvent(string eventName, string message)
         {

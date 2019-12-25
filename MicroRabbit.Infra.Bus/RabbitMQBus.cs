@@ -15,7 +15,7 @@ namespace MicroRabbit.Infra.Bus
 {
     public sealed class RabbitMQBus : IEventBus
     {
-        private readonly IMediator _mediator = null;
+        private  IMediator _mediator = null;
 
         // Holds the event handlers for specific type
         private readonly Dictionary<string, List<Type>> _handlers;

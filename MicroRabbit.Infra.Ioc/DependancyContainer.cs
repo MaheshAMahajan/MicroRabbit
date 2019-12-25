@@ -11,6 +11,9 @@ using System.Collections.Generic;
 using System.Text;
 using MediatR;
 using System.Reflection;
+using MicroRabbit.Banking.Domain.Commands;
+using MicroRabbit.Banking.Domain.CommandHandlers;
+
 namespace MicroRabbit.Infra.Ioc
 {
     public  class DependancyContainer
@@ -22,7 +25,7 @@ namespace MicroRabbit.Infra.Ioc
            // services.AddMediatR(new Assembly[] { Assembly.GetExecutingAssembly() });
 
             services.AddTransient<IEventBus, RabbitMQBus>();  
-
+            services.AddTransient<IRequestHandler<CreateTransferCommand,bool> ,TransferCommandHandler>();
 
             //Apllication Services 5
             services.AddTransient<IAccountService, AccountService>();

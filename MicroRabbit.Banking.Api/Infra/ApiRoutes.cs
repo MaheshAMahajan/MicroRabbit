@@ -14,6 +14,7 @@ namespace MicroRabbit.Banking.Api.Infra
         public class BankingApi
         {
             public const string GetAccounts = Base +   "/Banking/GetAccounts" ;
+            public const string TransferFund = Base + "/Banking/TransferFund";
         }
     }
 }

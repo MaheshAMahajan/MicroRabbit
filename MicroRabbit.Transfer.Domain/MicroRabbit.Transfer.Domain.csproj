@@ -4,4 +4,13 @@
     <TargetFramework>netcoreapp3.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="CommandHandler\" />
+    <Folder Include="Command\" />
+    <Folder Include="Events\" />
+    <Folder Include="EventHandler\" />
+    <Folder Include="Model\" />
+    <Folder Include="Interfaces\" />
+  </ItemGroup>
+
 </Project>

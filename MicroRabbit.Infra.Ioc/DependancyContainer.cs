@@ -13,6 +13,11 @@ using MediatR;
 using System.Reflection;
 using MicroRabbit.Banking.Domain.Commands;
 using MicroRabbit.Banking.Domain.CommandHandlers;
+using MicroRabbit.Transfer.Domain.Interfaces;
+using MicroRabbit.Transfer.Data.Repository;
+using MicroRabbit.Transfer.Data.Context;
+using MicroRabbit.Transfer.Application.Interfaces;
+using MicroRabbit.Transfer.Application.Services;
 
 namespace MicroRabbit.Infra.Ioc
 {
@@ -20,19 +25,25 @@ namespace MicroRabbit.Infra.Ioc
     { 
         public static void RegisteredServices(IServiceCollection services)
         {
-            //Domain Bus 
 
-           // services.AddMediatR(new Assembly[] { Assembly.GetExecutingAssembly() });
 
+            // services.AddMediatR(new Assembly[] { Assembly.GetExecutingAssembly() });
+            //Domain Rabbit MQ Bus
             services.AddTransient<IEventBus, RabbitMQBus>();  
+            
+            //Banking Service CommandHandler 
             services.AddTransient<IRequestHandler<CreateTransferCommand,bool> ,TransferCommandHandler>();
 
-            //Apllication Services 5
+            //Apllication Services 
             services.AddTransient<IAccountService, AccountService>();
+            services.AddTransient<ITransferService, TransferService>();
 
-            //Application Data repository
-            services.AddTransient<IAccountRepository, AccountRepository>();
-            services.AddTransient<BankingDBContext>(); 
+            //Data repository
+            services.AddTransient<IAccountRepository, AccountRepository>(); 
+            services.AddTransient<ITransferRepository, TransferRepository>();
+            
+            services.AddTransient<BankingDBContext>();
+            services.AddTransient<TransferDbContext>();
         }
     }
 }

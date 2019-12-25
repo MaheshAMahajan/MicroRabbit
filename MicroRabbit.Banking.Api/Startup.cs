@@ -41,7 +41,6 @@ namespace MicroRabbit.Banking.Api
                c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "Banking Services", Version = "v1" });
            
            });
-
             //services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo 
             //{ Title = "Put title here", Description = "DotNet Core Api 3 - with swagger" }); });
            services.AddMediatR(typeof(Startup));

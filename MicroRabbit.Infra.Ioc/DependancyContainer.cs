@@ -18,6 +18,8 @@ using MicroRabbit.Transfer.Data.Repository;
 using MicroRabbit.Transfer.Data.Context;
 using MicroRabbit.Transfer.Application.Interfaces;
 using MicroRabbit.Transfer.Application.Services;
+using MicroRabbit.Transfer.Domain.Events;
+using MicroRabbit.Transfer.Domain.EventHandlers;
 
 namespace MicroRabbit.Infra.Ioc
 {
@@ -29,8 +31,18 @@ namespace MicroRabbit.Infra.Ioc
 
             // services.AddMediatR(new Assembly[] { Assembly.GetExecutingAssembly() });
             //Domain Rabbit MQ Bus
-            services.AddTransient<IEventBus, RabbitMQBus>();  
-            
+            services.AddSingleton<IEventBus, RabbitMQBus>(sp => 
+            {
+                var scopeFactory = sp.GetRequiredService<IServiceScopeFactory>();
+                return new RabbitMQBus(sp.GetRequiredService<IMediator>(), scopeFactory);
+            });
+
+            //scubscriptions  
+            services.AddTransient<TransferEventHandler>();
+
+            //Domain Events 
+            services.AddTransient<IEventHandler<TransferCreatedEvent>, TransferEventHandler>();
+
             //Banking Service CommandHandler 
             services.AddTransient<IRequestHandler<CreateTransferCommand,bool> ,TransferCommandHandler>();
 
